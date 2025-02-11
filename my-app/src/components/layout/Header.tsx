@@ -1,3 +1,4 @@
+'use client';
 import React, { useEffect, useState } from 'react'
 
 const AnnouncementBar: any = () => {
@@ -41,12 +42,19 @@ const Header = () => {
 
 
       return (
-    <header className="w-full sticky top-0 z-50">
-      <div className='w-full transform transition-transform duration-300 ease-in-out'>
-        <AnnouncementBar />
-      </div>
-    </header>
-  );
+        <header className="w-full sticky top-0 z-50">
+          <div
+            className={`w-full transform transition-transform duration-300 ease-in-out ${
+              isOpen ? "translate-y-0" : "-translate-y-full"
+            }`}
+          >
+            <AnnouncementBar />
+            <div className="w-full flex justify-between items-center py-3 sm:py-4 bg-white/80 shadow-sm border-b border-gray-100 backdrop-blur-sm">
+            
+            </div>
+          </div>
+        </header>
+      );
 }
 
 export default Header;
