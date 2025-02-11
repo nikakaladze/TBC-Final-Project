@@ -3,6 +3,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { getCurrentSession } from "@/actions/auth";
 import Header from "@/components/layout/Header";
+import { SanityLive } from "@/sanity/lib/live";
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = { 
@@ -21,7 +22,7 @@ const RootLayout = async({
       <body className={`${inter.className} antialiased bg-white min-h-[-125vh]`}>
         <Header user={user}/>
         {children}
-        
+        <SanityLive />
       </body>
     </html>
   )

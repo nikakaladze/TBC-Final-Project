@@ -11,8 +11,9 @@ if(!token){
 };
 
 
-export const {sanityFetch,sanityLive} = defineLive({
+export const {sanityFetch,SanityLive} = defineLive({
   client,
   serverToken:token,
-  browserToken:token
+  browserToken:token,
+
 })
