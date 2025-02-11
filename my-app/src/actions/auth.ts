@@ -115,3 +115,10 @@ export const getCurrentSession = cache(async (): Promise<SessionValidationResult
 export const hashPassword = async(password:string) => {
     return encodeHexLowerCase(sha256(new TextEncoder().encode(password)))
 }
+
+export const verifyPassword = async(password:string,hash:string) => {
+    const passwordHash = await  hashPassword(password);
+    return passwordHash === hash
+};
+
+export 
