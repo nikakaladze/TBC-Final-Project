@@ -6,10 +6,6 @@ import { useRouter } from "next/navigation";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
 
-type HeaderProps = {
-  user: Omit<User, "passwordHash"> | null;
-};
-
 const AnnouncementBar: any = () => {
   return (
     <div className="w-full bg-black py-2">
@@ -22,7 +18,13 @@ const AnnouncementBar: any = () => {
   );
 };
 
-const Header = ({ user }: HeaderProps) => {
+type HeaderProps = {
+  user: Omit<User, "passwordHash"> | null;
+  categorySelector: React.ReactNode;
+};
+
+
+const Header = ({ user,categorySelector }: HeaderProps) => {
   const router = useRouter();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -81,6 +83,7 @@ const Header = ({ user }: HeaderProps) => {
               <nav className="hidden md:flex gap-4 lg:gap-6 text-sm font-medium">
                 <Link href={"#"}>Shop</Link>
                 <Link href={"#"}>New Arrivals</Link>
+                {categorySelector}
                 <Link href={"#"}>Sale</Link>
               </nav>
             </div>
