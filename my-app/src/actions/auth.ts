@@ -1,3 +1,5 @@
+'use server';
+
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding";
 import { sha256 } from "@oslojs/crypto/sha2";
 import { cookies } from "next/headers";
@@ -6,7 +8,7 @@ import type { User,Session } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { cache } from "react";
 
-export function generateSessionToken(): string {
+export async function generateSessionToken(): Promise<string> {
     const bytes = new Uint8Array(20);
     crypto.getRandomValues(bytes);
     const token = encodeBase32LowerCaseNoPadding(bytes);
@@ -121,4 +123,67 @@ export const verifyPassword = async(password:string,hash:string) => {
     return passwordHash === hash
 };
 
-export 
+export const registerUser = async(email:string,password:string) => {
+    const passwordHash = await hashPassword(password);
+    try {
+        const user = await prisma.user.create({
+            data:{
+                email,
+                passwordHash,
+
+            }
+        });
+        const safeUser = {
+            ...user,
+            passwordHash:undefined,
+
+        }
+        return {
+            user:safeUser,
+            error:null,
+        }
+    } catch (e) {
+        return{
+            user:null,
+            error:'failed to  register user'
+        }
+    }
+}
+
+
+export const loginUser = async(email:string,password:string) => {
+
+    const user = await prisma.user.findUnique({
+        where: {
+            email:email
+        }
+    })
+
+    if(!user){
+        return {
+            user:null,
+            error:'User not Found'
+        }
+    }
+    const passwordValid = await verifyPassword(password,user.passwordHash);
+    if(!passwordValid){
+        return{
+            user:null,
+            error:'invalid password'
+        }
+    }
+        const token = await generateSessionToken();
+        const session = await createSession(token,user.id);
+        await setSessionTokenCookie(token,session.expiresAt)
+
+    const safeUser = {
+        ...user,
+        passwordHash:undefined,
+
+    }
+    return{
+        user:safeUser,
+        error:null,
+
+    }
+}
