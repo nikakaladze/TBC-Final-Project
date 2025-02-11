@@ -1,6 +1,14 @@
 "use client";
+import { logoutUser } from "@/actions/auth";
+import { User } from "@prisma/client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import router from "next/router";
 import React, { useEffect, useState } from "react";
+
+type HeaderProps = {
+  user: Omit<User, "passwordHash"> | null;
+};
 
 const AnnouncementBar: any = () => {
   return (
@@ -14,7 +22,9 @@ const AnnouncementBar: any = () => {
   );
 };
 
-const Header = () => {
+const Header = ({ user }: HeaderProps) => {
+  const router = useRouter();
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [prevScrollY, setPrevScrollY] = useState<number>(0);
 
@@ -75,27 +85,14 @@ const Header = () => {
               </nav>
             </div>
 
-            <Link href={"#"}></Link>
+            <Link href={"#"} className="absolute left 1/2 -translate-x-1/2">
+              <span className="text-xl sm:2-xl font-bold tracking-tight">
+                Deal
+              </span>
+            </Link>
 
             <div className="flex flex-1 justify-end items-center    gap-2 sm:gap-4">
-              <button className="text-gray-700 hover:text-gray-700 hidden sm:block">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 sm:h-6 sm:w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
-              </button>
-              <Link href={"/auth/sign-in"}>Sign In</Link>
-              <Link href={"/auth/sign-up"}>Sign Up</Link>
+              <button className="text-gray-700 hover:text-gray-700 hidden sm:block"></button>
               <button className="text-gray-700 hover:text-gray-900 relative">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -111,8 +108,42 @@ const Header = () => {
                     d="M4 6h16M4 12h16M4 18h16"
                   />
                 </svg>
-                <span className='absolute -top-1 -right-1 bg-black text-white text-[10px] sm:text-xs w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center'></span>
+                <span className="absolute -top-1 -right-1 bg-black text-white text-[10px] sm:text-xs w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center"></span>
               </button>
+
+              {user ? (
+                <div className="flex items-center gap-2 sm:gap-4">
+                  <span className="text-sm text-gray-700 hidden md:block">
+                    {user.email}
+                  </span>
+                  <Link
+                    href="#"
+                    className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900"
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      await logoutUser();
+                      router.refresh();
+                    }}
+                  >
+                    Sign Out
+                  </Link>
+                </div>
+              ) : (
+                <React.Fragment>
+                  <Link
+                    href="/auth/sign-in"
+                    className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/auth/sign-up"
+                    className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900"
+                  >
+                    Sign Up
+                  </Link>
+                </React.Fragment>
+              )}
             </div>
           </div>
         </div>
