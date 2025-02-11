@@ -8,6 +8,7 @@ export default function Home() {
  return(
   <>
   <Header />
+  <h1>hello </h1>
   </>
  )
 }
