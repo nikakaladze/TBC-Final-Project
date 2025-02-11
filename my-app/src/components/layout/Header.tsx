@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 const AnnouncementBar: any = () => {
   return (
@@ -13,7 +13,34 @@ const AnnouncementBar: any = () => {
 };
 
 const Header = () => {
-  return (
+    const  [isOpen,setIsOpen] = useState<boolean>(false);
+    const [prevScrollY,setPrevScrollY] = useState<number>(0)
+
+         useEffect(() => {
+           const handleScroll = () => {
+             const currentScrollY = window.scrollY;
+             const scrolledUp = currentScrollY < prevScrollY;
+
+             if (scrolledUp) {
+               setIsOpen(true);
+             } else if (currentScrollY > 100) {
+               setIsOpen(false);
+             }
+
+             setPrevScrollY(currentScrollY);
+           };
+
+           setPrevScrollY(window.scrollY);
+
+           window.addEventListener("scroll", handleScroll);
+
+           return () => {
+             window.removeEventListener("scroll", handleScroll);
+           };
+         }, [prevScrollY]);
+
+
+      return (
     <header className="w-full sticky top-0 z-50">
       <div className='w-full transform transition-transform duration-300 ease-in-out'>
         <AnnouncementBar />
