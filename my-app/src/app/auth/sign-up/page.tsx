@@ -30,16 +30,16 @@ const SignUpPage = async () => {
         if(error){
             return{message:error}
         }else if(user){
-            await  loginUser(email,password),
-
-            await redirect("/"),
+            await  loginUser(email,password);
+            
+            return redirect("/")
             
         }
 
 
         
     }
-  return <SignUp />
+  return <SignUp action={action}/>
 }
 
 export default SignUpPage;
