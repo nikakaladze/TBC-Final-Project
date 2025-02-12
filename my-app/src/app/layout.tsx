@@ -5,6 +5,8 @@ import { getCurrentSession } from "@/actions/auth";
 import Header from "@/components/layout/Header";
 import { SanityLive } from "@/sanity/lib/live";
 import HeaderCategorySelector from "@/components/layout/HeaderCategorySelector";
+import Cart from "@/components/cart/Cart";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = { 
@@ -19,17 +21,19 @@ const RootLayout = async({
 ) => {
   const {user } = await getCurrentSession();
   
-  return(
+  return (
     <html lang="en">
-      <body className={`${inter.className} antialiased bg-white min-h-[-125vh]`}>
-        <Header user={user}
-        categorySelector={<HeaderCategorySelector  />}
-        />
+      <body
+        className={`${inter.className} antialiased bg-white min-h-[-125vh]`}
+      >
+        <Header user={user} categorySelector={<HeaderCategorySelector />} />
         {children}
+        
+        <Cart />
         <SanityLive />
       </body>
     </html>
-  )
+  );
 }
 
 export default RootLayout;
