@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
+import HeaderSearchBar from "./HeaderSearchBar";
 
 const AnnouncementBar: any = () => {
   return (
@@ -95,24 +96,7 @@ const Header = ({ user,categorySelector }: HeaderProps) => {
             </Link>
 
             <div className="flex flex-1 justify-end items-center    gap-2 sm:gap-4">
-              <button className="text-gray-700 hover:text-gray-700 hidden sm:block"></button>
-              <button className="text-gray-700 hover:text-gray-900 relative">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 sm:h-6 sm:w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
-                <span className="absolute -top-1 -right-1 bg-black text-white text-[10px] sm:text-xs w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center"></span>
-              </button>
+        <HeaderSearchBar  />
 
               {user ? (
                 <div className="flex items-center gap-2 sm:gap-4">
